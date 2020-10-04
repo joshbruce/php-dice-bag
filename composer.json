@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "joshbruce/php-dice-bag",
+  "description": "A PHP library for rolling various dice and get various results",
   "type": "library",
   "license": "MIT",
   "authors": [],
@@ -8,14 +8,18 @@
     "php": "~7"
   },
   "require-dev": {
-    "phpunit/phpunit": "~9.1"
+    "phpunit/phpunit": "~9.1",
+    "8fold/php-shoop": "~0.10"
   },
   "autoload": {
     "psr-4": {
+      "JoshBruce\\DiceBag\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
+      "JoshBruce\\DiceBag\\Tests\\": "tests/",
+      "Eightfold\\Foldable\\Tests\\": "./vendor/8fold/php-foldable/tests/"
     }
   },
   "config": {

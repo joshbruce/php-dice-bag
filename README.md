@@ -1,8 +1,6 @@
-> Note: Delete the labels in the new repo and use https://github.com/jvandemo/copy-github-labels-cli to copy the ones found here to the new repo
+# Dice Bag
 
-# {Name of product or project}
-
-{brief description}
+Inspired by [AnyDice](https://anydice.com) and driven by the desire to create an [MORPG](https://en.wikipedia.org/wiki/Massively_multiplayer_online_role-playing_game) using various dice-based systems; specifically [7DSystem](http://www.7dsystem.com) and the [Cypher System](http://cypher-system.com).
 
 ## Installation
 
