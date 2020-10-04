@@ -7,7 +7,7 @@ include_once("../vendor/autoload.php");
 
 use JoshBruce\DiceBag\DiceBag;
 
-$common = DiceBag::roll4d6();
+$common = DiceBag::roll4d20();
 
 print "<p>". $common ."</p>";
 
