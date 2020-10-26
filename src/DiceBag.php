@@ -16,6 +16,8 @@ class DiceBag extends Fold
 
     private $rolls = [];
 
+    private $isCast = false;
+
     static public function roll(int $count = 1, int $sides = 6): DiceBag
     {
         $bag = static::fold($sides, $count);
@@ -41,11 +43,17 @@ class DiceBag extends Fold
         $this->count = $count;
     }
 
+    public function isCast(): bool
+    {
+        return $this->isCast;
+    }
+
     public function rolls(): array
     {
         if (count($this->rolls) === 0) {
             $this->rolls = Shoop::this(range(1, $this->count))
                 ->each(fn($d) => Dn::withSides($this->sides))->unfold();
+            $this->isCast = true;
         }
         return $this->rolls;
     }
