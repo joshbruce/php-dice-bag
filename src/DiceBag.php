@@ -34,8 +34,14 @@ class DiceBag extends Fold
 
     public function __construct(int $sides = 6, int $count = 1)
     {
-        $this->rolls = Shoop::this(range(1, $count))
-            ->each(fn($d) => Dn::withSides($sides))->unfold();
+        if ($count === 1) {
+            $this->rolls[] = Dn::withSides($sides);
+
+        } else {
+            $this->rolls = Shoop::this(range(1, $count))
+                ->each(fn($d) => Dn::withSides($sides))->unfold();
+
+        }
     }
 
     public function rolls()
@@ -53,18 +59,66 @@ class DiceBag extends Fold
         return $this;
     }
 
-    public function highest(int $length = 1): DiceBag
+    public function countHigherThan(int $value): int
     {
-        $this->sort();
-        $this->rolls = Shoop::this($this->rolls)->first($length)->unfold();
-        return $this;
+        $found = 0;
+        foreach ($this->rolls() as $die) {
+            if ($die->roll() > $value) {
+                $found += 1;
+            }
+        }
+        return $found;
     }
 
-    public function lowest(int $length = 1): DiceBag
+    public function countHigherThanOrEqualTo(int $value): int
+    {
+        return $this->countHigherThan($value) + $this->countEqualTo($value);
+    }
+
+    public function countLowerThan(int $value): int
+    {
+        $found = 0;
+        foreach ($this->rolls() as $die) {
+            if ($die->roll() < $value) {
+                $found += 1;
+            }
+        }
+        return $found;
+    }
+
+    public function countLowerThanOrEqualTo(int $value): int
+    {
+        return $this->countLowerThan($value) + $this->countEqualTo($value);
+    }
+
+    public function countEqualTo(int $value): int
+    {
+        $found = 0;
+        foreach ($this->rolls() as $die) {
+            if ($die->roll() === $value) {
+                $found += 1;
+            }
+        }
+        return $found;
+    }
+
+    public function hasEqualTo(int $value): bool
+    {
+        return $this->countEqualTo($value) > 0;
+    }
+
+    public function highest(int $length = 1): array
+    {
+        $this->sort();
+        $result = array_slice($this->rolls, 0, $length);
+        return $result;
+    }
+
+    public function lowest(int $length = 1): array
     {
         $this->sort(false);
-        $this->rolls = Shoop::this($this->rolls)->first($length)->unfold();
-        return $this;
+        $result = array_slice($this->rolls, 0, $length);
+        return $result;
     }
 
     public function sum(): int
@@ -82,7 +136,7 @@ class DiceBag extends Fold
     public function __debugInfo()
     {
         return [
-            "rolls" => implode(", ", $this->rolls)
+            "rolls" => $this->rolls
         ];
     }
 }
