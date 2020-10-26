@@ -136,13 +136,13 @@ class DiceBag extends Fold
 
     public function __toString()
     {
-        return "rolls: ". implode(", ", $this->rolls);
+        return "rolls: ". implode(", ", $this->rolls());
     }
 
     public function __debugInfo()
     {
         return [
-            "rolls" => $this->rolls
+            "rolls" => $this->rolls()
         ];
     }
 }
