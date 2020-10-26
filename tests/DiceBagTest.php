@@ -27,7 +27,11 @@ class DiceBagTest extends TestCase
     public function roll_4d6_keep_highest_3()
     {
         $actual = DiceBag::roll(4, 6)->highest(3);
-        $this->assert($actual, 3, 18, 3);
+        $sum = array_sum($actual);
+
+        $this->assertEquals(3, count($actual));
+        $this->assertLessThanOrEqual(24, $sum);
+        $this->assertGreaterThanOrEqual(3, $sum);
     }
 
     public function assert($sut, $diceCount = 1, $highest = 6, $lowest = 1)

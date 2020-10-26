@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace JoshBruce\DiceBag;
 
@@ -15,15 +16,17 @@ class DiceBag extends Fold
 
     private $rolls = [];
 
-    static public function roll(int $count = 1, int $sides = 6)
+    static public function roll(int $count = 1, int $sides = 6): DiceBag
     {
-        return static::fold($sides, $count);
+        $bag = static::fold($sides, $count);
+        $bag->result();
+        return $bag;
     }
 
     /**
      * roll7d6 -> roll(7, 6)
      */
-    static public function __callStatic(string $name, array $args = [])
+    static public function __callStatic(string $name, array $args = []): DiceBag
     {
         $name = Shoop::this($name);
         $numbers = $name->divide("d", false, 2);
@@ -34,19 +37,22 @@ class DiceBag extends Fold
 
     public function __construct(int $sides = 6, int $count = 1)
     {
-        if ($count === 1) {
-            $this->rolls[] = Dn::withSides($sides);
-
-        } else {
-            $this->rolls = Shoop::this(range(1, $count))
-                ->each(fn($d) => Dn::withSides($sides))->unfold();
-
-        }
+        $this->sides = $sides;
+        $this->count = $count;
     }
 
-    public function rolls()
+    public function rolls(): array
     {
+        if (count($this->rolls) === 0) {
+            $this->rolls = Shoop::this(range(1, $this->count))
+                ->each(fn($d) => Dn::withSides($this->sides))->unfold();
+        }
         return $this->rolls;
+    }
+
+    public function result(): array
+    {
+        return $this->rolls();
     }
 
     public function sort(bool $highToLow = true): DiceBag
@@ -111,14 +117,14 @@ class DiceBag extends Fold
     {
         $this->sort();
         $result = array_slice($this->rolls, 0, $length);
-        return $result;
+        return Shoop::this($result)->each(fn($d) => $d->roll())->unfold();
     }
 
     public function lowest(int $length = 1): array
     {
         $this->sort(false);
         $result = array_slice($this->rolls, 0, $length);
-        return $result;
+        return Shoop::this($result)->each(fn($d) => $d->roll())->unfold();
     }
 
     public function sum(): int
