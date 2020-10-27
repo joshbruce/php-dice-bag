@@ -65,7 +65,7 @@ class DiceBag extends Fold
 
     public function sort(bool $highToLow = true): DiceBag
     {
-        usort($this->rolls, function($a, $b) use ($highToLow) {
+        usort($this->rolls(), function($a, $b) use ($highToLow) {
             return ($highToLow)
                 ? $a->roll() < $b->roll()
                 : $a->roll() > $b->roll();
@@ -124,14 +124,14 @@ class DiceBag extends Fold
     public function highest(int $length = 1): array
     {
         $this->sort();
-        $result = array_slice($this->rolls, 0, $length);
+        $result = array_slice($this->rolls(), 0, $length);
         return Shoop::this($result)->each(fn($d) => $d->roll())->unfold();
     }
 
     public function lowest(int $length = 1): array
     {
         $this->sort(false);
-        $result = array_slice($this->rolls, 0, $length);
+        $result = array_slice($this->rolls(), 0, $length);
         return Shoop::this($result)->each(fn($d) => $d->roll())->unfold();
     }
 
@@ -150,7 +150,10 @@ class DiceBag extends Fold
     public function __debugInfo()
     {
         return [
-            "rolls" => $this->rolls()
+            "pool"   => $this->count,
+            "sides"  => $this->sides,
+            "isCast" => $this->isCast(),
+            "rolls"  => $this->rolls()
         ];
     }
 }

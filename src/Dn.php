@@ -37,7 +37,8 @@ class Dn extends Fold
     public function __debugInfo()
     {
         return [
-            "roll" => $this->roll()
+            "sides" => $this->sides,
+            "roll"  => $this->roll()
         ];
     }
 
