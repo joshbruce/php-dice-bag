@@ -32,8 +32,8 @@ class DiceBag extends Fold
     {
         $name = Shoop::this($name);
         $numbers = $name->divide("d", false, 2);
-        $sides   = $numbers->last()->unfold();
-        $count   = $numbers->first()->last()->unfold();
+        $sides   = intval($numbers->last()->unfold());
+        $count   = intval($numbers->first()->last()->unfold());
         return static::roll($count, $sides);
     }
 
